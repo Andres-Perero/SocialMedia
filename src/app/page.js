@@ -46,7 +46,7 @@ export default function Page() {
     };
 
     fetchData();
-  }, []);
+  }, [folderId]);
 
   useEffect(() => {
     if (!jsonData) return;

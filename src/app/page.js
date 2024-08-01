@@ -11,11 +11,12 @@ import {
   YoutubeIcon,
   TiktokIcon,
   TwitterXIcon,
+  DiscordIcon
 } from "./icons";
 import Image from "next/image";
 import Link from "next/link";
 //import dataJsonRepo from "../data-googleapis/dataIdFolders.json";
-import { fetchJsonData } from "src/lib/getdataFetch.js";
+import { fetchJsonData } from "src/lib/getdataFetch";
 //import  jsonData  from "./data.json";
 
 const iconComponents = {
@@ -25,6 +26,7 @@ const iconComponents = {
   YoutubeIcon,
   TiktokIcon,
   TwitterXIcon,
+  DiscordIcon,
 };
 
 export default function Page() {
@@ -161,9 +163,9 @@ export default function Page() {
 
         <div className={styles.column}>
           <div className={styles.animeContactContainer}>
-            <Link href={"/vistos"}>
+            <Link href={"/searchAnime"}>
               <section className={styles.anime}>
-                <h2>ANIME VISTOS</h2>
+                <h2>BIBLIOTECA</h2>
                 <div className={styles.animeImage}>
                   <Image
                     src={animeImages.img_folderAnime}

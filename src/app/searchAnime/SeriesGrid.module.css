@@ -1,0 +1,37 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 200px));
+    justify-content: center;
+    padding: 4vh 0 0 0;
+   
+  }
+  
+  .gridContainer a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: rgba(241, 220, 225, 0.804);
+    text-shadow: -3px 5px 8px #060108;
+  }
+  
+  .gridContainer img {
+    object-fit: cover;
+    box-shadow: 0px 4px 6px rgb(160, 159, 159);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    
+  }
+  
+  .gridItem {
+    background-color: rgba(44, 42, 42, 0.8);
+    font-size: 1.2rem;
+    text-align: center;
+    padding: 0vh;
+
+  }
+  
+  .gridItem img:hover {
+    transform: scale(1.03);
+    box-shadow: 0px 10px 20px rgba(251, 251, 251, 0.245);
+  }
+  
+ 

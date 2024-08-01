@@ -14,9 +14,8 @@ import {
 } from "./icons";
 import Image from "next/image";
 import Link from "next/link";
-//import dataJsonRepo from "../data-googleapis/dataIdFolders.json";
-import { fetchJsonData } from "src/lib/getdataFetch.js";
-//import  jsonData  from "./data.json";
+import dataJsonRepo from "../data-googleapis/dataIdFolders.json";
+import { fetchJsonData } from "src/lib/getdataFetch";
 
 const iconComponents = {
   InstagramIcon,
@@ -29,24 +28,23 @@ const iconComponents = {
 
 export default function Page() {
   const [jsonData, setJsonData] = useState(null);
-  //const folderId = dataJsonRepo?.socialMedia_Folder;
-  //const fileName = dataJsonRepo?.dataJsonUser;
-  const folderId = process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER;
-  //const fileName = process.env.NEXT_PUBLIC_DATA_JSON_USER;
+  const folderId = dataJsonRepo?.socialMedia_Folder;
+  const fileName = dataJsonRepo?.dataJsonUser;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-       
-        const data = await fetchJsonData(folderId);
-        setJsonData(data);
+        if (folderId) {
+          const data = await fetchJsonData(folderId);
+          setJsonData(data);
+        }
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [folderId]);
 
   useEffect(() => {
     if (!jsonData) return;

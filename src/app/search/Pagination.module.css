@@ -9,9 +9,10 @@
   margin: 0 5px;
   padding: 10px 20px;
   border: none;
-  background-color: #0070f3;
+  background-color: #0071f3cb;
   color: white;
   cursor: pointer;
+  border-radius: 12%;
 }
 
 .pagination button:disabled {

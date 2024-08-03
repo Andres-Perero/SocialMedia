@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Pagination.module.css";
+import { resetIcon } from "../icons_data"; // Import the reset icon
 
 export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const [inputPage, setInputPage] = useState(currentPage);

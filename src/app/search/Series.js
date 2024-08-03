@@ -2,9 +2,8 @@ import React from "react";
 import styles from "./SeriesGrid.module.css";
 import { SerieCard } from "./SerieCard";
 
-// Lista de series 
+// Lista de series
 export const Series = ({ seriesList }) => {
-
   return (
     <div className={styles.gridContainer}>
       {seriesList.map((serie) => (
@@ -14,9 +13,9 @@ export const Series = ({ seriesList }) => {
           image={serie.images.jpg.large_image_url}
           id={serie.mal_id}
           url={serie.url}
-          moreInfo={serie}
+          moreInfo={serie} // Enviar el objeto moreInfo al componente SerieCard
         />
-      ))} 
+      ))}
     </div>
   );
 };

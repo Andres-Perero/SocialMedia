@@ -163,7 +163,7 @@ export default function Page() {
 
         <div className={styles.column}>
           <div className={styles.animeContactContainer}>
-            <Link href={"/searchAnime"}>
+            <Link href={"/search"}>
               <section className={styles.anime}>
                 <h2>BIBLIOTECA</h2>
                 <div className={styles.animeImage}>

@@ -1,0 +1,67 @@
+.container {
+  border-radius: 5px;
+  text-align: center;
+  position: relative;
+  margin-top: 10px;
+}
+
+.row {
+  position: relative;
+}
+
+.inputContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.input {
+  width: 600px;
+  height: 45px;
+  margin: auto;
+  font-size: inherit;
+  padding: 0 28px;
+  padding-right: 50px; /* Espacio para el botón de reset */
+  border-radius: 30px;
+  border: 1.3px solid #f2f2f2;
+  outline: 0;
+  box-shadow: 2px 4px 8px 0 rgba(44, 42, 42, 0.8);
+  transition: all 300ms ease;
+}
+
+.resetButton {
+  position: absolute;
+
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  z-index: 2;
+
+}
+
+.resetButton svg {
+  background-color: rgba(217, 230, 225, 0.945);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout */
+@media screen and (max-width: 600px) {
+  .input {
+    width: 100%;
+    margin-top: 0;
+    padding-right: 50px; /* Espacio para el botón de reset */
+  }
+}

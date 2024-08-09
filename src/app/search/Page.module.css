@@ -18,7 +18,7 @@
 .homeLink {
   display: inline-block;
   padding: 5px 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #ffffff;
   background-color: #c9ddf3b2; /* Color de fondo */
   border-radius: 5px;
@@ -31,3 +31,5 @@
   background-color: #0056b3; /* Color de fondo al pasar el ratón */
   color: #e0e0e0; /* Color del texto al pasar el ratón */
 }
+
+

@@ -3,7 +3,7 @@ import styles from "./SeriesGrid.module.css";
 import { SerieCard } from "./SerieCard";
 
 // Lista de series
-export const Series = ({ seriesList }) => {
+export const Series = ({ seriesList, queryParam }) => {
   return (
     <div className={styles.gridContainer}>
       {seriesList.map((serie) => (
@@ -14,6 +14,7 @@ export const Series = ({ seriesList }) => {
           id={serie.mal_id}
           url={serie.url}
           moreInfo={serie} // Enviar el objeto moreInfo al componente SerieCard
+          queryParam={queryParam}
         />
       ))}
     </div>

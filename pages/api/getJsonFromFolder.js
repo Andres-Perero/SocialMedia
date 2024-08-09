@@ -1,28 +1,36 @@
-//getJsonFromFolder
 import { listFilesInFolder, getFileContent } from "../../src/lib/googleDrive.js";
 let cache = {};
 
 export default async function handler(req, res) {
-  const { folderId } = req.query;
+  const { folderId, fileName } = req.query;
 
-  if (!folderId) {
-    return res.status(400).json({ error: "Folder ID is required" });
+  if (!folderId || !fileName) {
+    return res.status(400).json({ error: "Folder ID and File Name are required" });
   }
 
-  if (cache[folderId]) {
-    return res.status(200).json(cache[folderId]);
+  // Append .json to the file name if it isn't already there
+  const fullFileName = fileName.endsWith(".json") ? fileName : `${fileName}.json`;
+
+  const cacheKey = `${folderId}_${fullFileName}`;
+  if (cache[cacheKey]) {
+    return res.status(200).json(cache[cacheKey]);
   }
 
   try {
-    
-    const file = await listFilesInFolder(folderId);
+    const files = await listFilesInFolder(folderId);
 
-    if (!file.length) {
+    if (!files.length) {
       return res.status(404).json({ error: "No files found in folder" });
     }
 
-    const content = await getFileContent(file[0].id);
-    cache[folderId] = content; // Cache the result
+    // Search for the file by name, ensuring it's a JSON file
+    const file = files.find(f => f.name === fullFileName);
+    if (!file) {
+      return res.status(404).json({ error: "File not found" });
+    }
+
+    const content = await getFileContent(file.id);
+    cache[cacheKey] = content; // Cache the result
 
     res.status(200).json(content);
   } catch (error) {

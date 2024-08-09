@@ -1,3 +1,201 @@
-.container{
- margin: 0%;
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 1.2rem;
+  background-color: #1e1e1e;
+  color: #f5f5f5;
+  max-width: 1200px;
+  margin: auto;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 0.2rem;
+}
+
+.title {
+  font-size: 2.1rem;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 1.1rem;
+}
+
+.title::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #ffb84c;
+  display: none;
+}
+
+.title:hover::after {
+  display: block;
+}
+
+.mainContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  
+}
+
+.imageWrapper {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.infoWrapper {
+  flex: 1;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.tab:hover {
+  
+  background-color: #ffb84c;
+}
+
+.tab.active {
+  background-color: #ffb84c;
+  color: #1e1e1e;
+}
+
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoLeft {
+  flex: 1;
+}
+
+.episodeList {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.detail {
+  margin-bottom: 5px;
+  line-height: 1.5;
+}
+
+.description {
+  margin-bottom: 15px;
+}
+
+.genres ul {
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.genres li {
+  padding: 3px 15px;
+  border: 1px solid #444;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.genres li:hover {
+  background-color: #444;
+}
+
+
+.container h3 {
+  font-size: 0.8rem;
+  margin-top: 0.1rem;
+  color: #ffb84c;
+}
+
+.container p,
+.container a {
+  font-size: 0.9rem;
+  color: #dcdcdc;
+}
+
+.container a {
+  text-decoration: none;
+  color: #ffb84c;
+}
+
+.container a:hover {
+  background-color: #ffb84c;
+  color: #1e1e1e;
+  border-radius: 5px;
+  padding: 4px 1px;
+}
+
+.socials {
+  display: inline;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.socials svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+  transition: fill 0.3s;
+}
+
+.likeIcon:hover {
+  transform: scale(1.2);
+}
+.likeIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  border-radius: 50%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.likeIcon svg {
+  width: 24px;
+  height: 24px;
+  stroke: rgba(224, 22, 22, 0.829); /* Default stroke color */
+  fill: #ebdddd; /* Ensure fill doesn't override stroke color */
+  transition: stroke 0.3s ease;
+}
+
+.likeIcon:hover svg {
+  stroke: rgba(187, 230, 34, 0.171); /* Stroke color on hover */
+}
+
+.likeIcon.active {
+
+  stroke: rgb(0, 255, 85); /* Stroke color when clicked */
+}
+
+.likeIcon.active svg {
+  stroke: rgba(214, 211, 224, 0.438); /* Stroke color when clicked */
 }

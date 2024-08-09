@@ -4,6 +4,7 @@ import Head from "next/head";
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
+import { useSearchParams } from "next/navigation";
 import {
   InstagramIcon,
   OkruIcon,
@@ -11,7 +12,7 @@ import {
   YoutubeIcon,
   TiktokIcon,
   TwitterXIcon,
-  DiscordIcon
+  DiscordIcon,
 } from "./icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,6 +31,8 @@ const iconComponents = {
 };
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const [queryParam, setQueryParam] = useState("");
   const [jsonData, setJsonData] = useState(null);
   //const folderId = dataJsonRepo?.socialMedia_Folder;
   //const fileName = dataJsonRepo?.dataJsonUser;
@@ -37,10 +40,15 @@ export default function Page() {
   //const fileName = process.env.NEXT_PUBLIC_DATA_JSON_USER;
 
   useEffect(() => {
+    const q = searchParams.get("q");
+
+    setQueryParam(q);
+  }, [searchParams]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
-       
-        const data = await fetchJsonData(folderId);
+        const data = await fetchJsonData(folderId, queryParam);
         setJsonData(data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -48,7 +56,7 @@ export default function Page() {
     };
 
     fetchData();
-  }, [folderId]);
+  }, [folderId, queryParam]);
 
   useEffect(() => {
     if (!jsonData) return;
@@ -163,15 +171,44 @@ export default function Page() {
 
         <div className={styles.column}>
           <div className={styles.animeContactContainer}>
-            <Link href={"/search"}>
+            <Link
+              href={{
+                pathname: "/vistos",
+                query: { q: queryParam },
+              }}
+            >
+              <section className={styles.anime}>
+                <h2>VISTOS</h2>
+                <div className={styles.animeImage}>
+                  <Image
+                    src={animeImages.img_folderAnime}
+                    alt="Anime Vistos"
+                    width={500}
+                    height={200}
+                    style={{ objectFit: "cover" }}
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              </section>
+            </Link>
+            <Link
+              href={{
+                pathname: "/search",
+                query: { q: queryParam },
+              }}
+            >
               <section className={styles.anime}>
                 <h2>BIBLIOTECA</h2>
                 <div className={styles.animeImage}>
                   <Image
                     src={animeImages.img_folderAnime}
-                    alt="Anime Image"
+                    alt="Anime Biblioteca"
                     width={500}
                     height={200}
+                    style={{ objectFit: "cover" }}
+                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
               </section>
@@ -185,6 +222,8 @@ export default function Page() {
                     alt="Battle Song"
                     width={500}
                     height={200}
+                    style={{ objectFit: "cover" }}
+                    priority
                   />
                 </div>
               </section>

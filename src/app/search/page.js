@@ -33,8 +33,7 @@ const SearchAnime = () => {
       setPagination(JSON.parse(storedPagination));
       setCurrentPage(parseInt(storedPage, 10));
     } else {
-      console.log((parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1)
-      fetchAnime(search, (parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1);
+       fetchAnime(search, (parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1);
     }
   }, []);
 

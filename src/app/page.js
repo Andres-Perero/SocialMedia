@@ -36,16 +36,15 @@ export default function Page() {
   const [jsonData, setJsonData] = useState(null);
   //const folderId = dataJsonRepo?.socialMedia_Folder;
   //const fileName = dataJsonRepo?.dataJsonUser;
-  const folderId = process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER;
-  //const fileName = process.env.NEXT_PUBLIC_DATA_JSON_USER;
+  const folderId = process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER_DATA_USER;
 
   useEffect(() => {
     const q = searchParams.get("q");
-
     setQueryParam(q);
   }, [searchParams]);
 
   useEffect(() => {
+    if (!queryParam) return;
     const fetchData = async () => {
       try {
         const data = await fetchJsonData(folderId, queryParam);

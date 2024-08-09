@@ -63,6 +63,8 @@ const Details = () => {
             alt={moreInfo.title}
             fill
             style={{ objectFit: "cover" }}
+            priority 
+            sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw" 
           />
           <div
             className={`${styles.likeIcon} ${isLiked ? styles.active : ""}`}

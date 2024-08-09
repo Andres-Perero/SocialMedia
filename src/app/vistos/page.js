@@ -10,7 +10,7 @@ const Vistos = () => {
   const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
   const [jsonData, setJsonData] = useState(null);
-  const folderId = process.env.NEXT_PUBLIC_DATA_VIEWED_PER_USER;
+  const folderId = process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER_DATA_VIEWED_PER_USER;
 
   useEffect(() => {
     const q = searchParams.get("q");

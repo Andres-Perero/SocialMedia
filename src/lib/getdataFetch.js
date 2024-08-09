@@ -1,6 +1,6 @@
 //getdataFetch
 export async function fetchJsonData(folderId, fileName) {
- 
+
   if (!folderId || !fileName) {
     console.error('Folder ID or File Name is missing');
     return null;

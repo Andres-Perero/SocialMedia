@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useEffect, useState } from "react";
 import { FormSearchSerie } from "./FormSearchSerie";
@@ -8,6 +8,7 @@ import Link from "next/link";
 import styles from "./Page.module.css";
 import { HomeIcon } from "../icons_data";
 import { useSearchParams } from "next/navigation";
+import Loader from "../Loader";
 
 const SearchAnime = () => {
   const [animeList, setAnimeList] = useState([]);
@@ -16,7 +17,7 @@ const SearchAnime = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
-
+ 
   useEffect(() => {
     const q = searchParams.get("q");
     setQueryParam(q);
@@ -32,13 +33,12 @@ const SearchAnime = () => {
       setPagination(JSON.parse(storedPagination));
       setCurrentPage(parseInt(storedPage, 10));
     } else {
-      //fetchAnime(search);
-      fetchAnime(search, parseInt(storedPage, 10));
+      console.log((parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1)
+      fetchAnime(search, (parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1);
     }
   }, []);
 
   const fetchAnime = async (query = "", page) => {
-    // Si `page` es null o undefined, se establece en 1
     const currentPage = page ?? 1;
 
     const res = await fetch(
@@ -50,7 +50,6 @@ const SearchAnime = () => {
     setPagination(data.pagination);
     setCurrentPage(currentPage);
 
-    // Guardar en sessionStorage
     sessionStorage.setItem("search", query);
     sessionStorage.setItem("animeList", JSON.stringify(data.data));
     sessionStorage.setItem("pagination", JSON.stringify(data.pagination));
@@ -75,7 +74,7 @@ const SearchAnime = () => {
     sessionStorage.removeItem("animeList");
     sessionStorage.removeItem("pagination");
     sessionStorage.removeItem("currentPage");
-    localStorage.removeItem("moreInfo"); // Limpiar también localStorage
+    localStorage.removeItem("moreInfo");
     fetchAnime();
   };
 
@@ -99,15 +98,17 @@ const SearchAnime = () => {
         setSearch={setSearch}
         resetSearch={resetSearch}
       />
-      {pagination.last_visible_page >= 1 && (
+
+      {pagination.last_visible_page && pagination.last_visible_page > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={pagination.last_visible_page}
           onPageChange={handlePageChange}
         />
       )}
+      
       <Series seriesList={animeList} queryParam={queryParam} />
-      {pagination.last_visible_page > 1 && (
+      {pagination.last_visible_page && pagination.last_visible_page > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={pagination.last_visible_page}

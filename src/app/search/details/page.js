@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import FormListEpisodes from "./formListEpisodes";
@@ -7,10 +8,7 @@ import Image from "next/image";
 import {
   RederictIcon,
   LikeIcon,
-  LikeFillIcon, // Import the filled version of the Like icon
-  ExclamationCircleIcon,
-  StationIcon,
-  CollectionPlayIcon,
+  LikeFillIcon,
 } from "../../icons_data";
 import { useSearchParams } from "next/navigation";
 import Loader from "src/app/Loader";
@@ -18,7 +16,7 @@ import Loader from "src/app/Loader";
 const Details = () => {
   const [moreInfo, setMoreInfo] = useState(null);
   const [activeTab, setActiveTab] = useState("info");
-  const [isLiked, setIsLiked] = useState(false); // State to track the like status
+  const [isLiked, setIsLiked] = useState(false);
   const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
 
@@ -36,7 +34,7 @@ const Details = () => {
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
-    SaveSerie(moreInfo); // Call the function to save the information
+    SaveSerie(moreInfo);
   };
 
   if (!moreInfo) {
@@ -159,14 +157,7 @@ const Details = () => {
 
 // Function to handle saving the series
 const SaveSerie = (serie) => {
-  // Logic to save the serie, e.g., to local storage or a database
   console.log("Saving series:", serie);
 };
 
-export default function PageWrapper() {
-  return (
-    <Suspense fallback={<Loader />}>
-      <Details />
-    </Suspense>
-  );
-}
+export default Details;

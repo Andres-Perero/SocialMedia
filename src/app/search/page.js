@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import Loader from "../Loader";
 
 const SearchAnime = () => {
+  const searchParams = useSearchParams();
   const [animeList, setAnimeList] = useState([]);
   const [pagination, setPagination] = useState({});
   const [search, setSearch] = useState("");

@@ -1,5 +1,15 @@
-// next.config.js
+// next.config.mjs
 export const images = {
-    domains: ['cdn.myanimelist.net'],
+  remotePatterns: [
+    {
+      protocol: "https",
+      hostname: "cdn.myanimelist.net",
+      port: "",
+      pathname: "/**",
+    },
+  ],
 };
-  
+
+export default {
+  images,
+};

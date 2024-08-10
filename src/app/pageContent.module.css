@@ -1,0 +1,173 @@
+/* Contenedor principal del contenido */
+.firstRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 00px;
+  justify-content: space-between;
+}
+
+
+
+.description {
+  background-color: #333;
+  padding: 40px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  max-width: 500px;
+
+}
+
+.socials {
+  display: flex;
+  justify-content: space-around;
+  margin: 0px 5px;
+  margin-top: 20px;
+  position: relative;
+  width: 400px;
+}
+
+.socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+.socials svg {
+  width: 100%;
+  height: 100%;
+  fill: #fff;
+  transition: fill 0.3s;
+}
+
+.socials a:hover svg {
+  fill: #a64d79;
+}
+
+.socials a::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  font-size: 12px;
+}
+
+.socials a:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.animeContactContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.anime,
+.contact {
+  width: 100%;
+  margin-bottom: 0px;
+  margin: 0%;
+}
+
+
+
+.animeImage img,
+.contactImage img {
+  margin-top: 3%;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.schedule {
+  width: 100%;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1%;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+.scheduleTable th {
+  background-color: hsla(315, 68%, 19%, 0.658);
+  color: #fcfcfc;
+}
+
+.scheduleTable tr:first-child {
+  background-color: hsla(315, 67%, 19%, 0.205);
+  color: #fcfcfc;
+}
+
+
+.anime,
+.contact {
+  width: 15%;
+  margin-bottom: 0;
+  margin: 0;
+  perspective: 1000px;
+}
+
+.anime:hover .animeImage,
+.contact:hover .contactImage {
+  transform: scale(1.05);
+}
+
+.animeImage,
+.contactImage {
+  margin-top: 3%;
+  width: 100%;
+  border-radius: 5px;
+  transition: transform 0.2s ease-in-out;
+  transform-style: preserve-3d;
+}
+
+.animeImage img,
+.contactImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 5px;
+}
+
+.animeImage,
+.contactImage {
+  perspective: 1000px;
+  transition: transform 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99);
+  will-change: transform;
+}
+
+.animeImage img,
+.contactImage img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  transition: transform 400ms cubic-bezier(0.03, 0.98, 0.52, 0.99);
+}
+
+.currentDay {
+  background-color: #ffdd57;
+  color: #e61111;
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import FormListEpisodes from "./formListEpisodes";
@@ -163,4 +163,10 @@ const SaveSerie = (serie) => {
   console.log("Saving series:", serie);
 };
 
-export default Details;
+export default function PageWrapper() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <Details />
+    </Suspense>
+  );
+}

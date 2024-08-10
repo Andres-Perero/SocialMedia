@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { FormSearchSerie } from "./FormSearchSerie";
 import { Pagination } from "./Pagination";
 import { Series } from "./Series";
@@ -15,9 +15,8 @@ const SearchAnime = () => {
   const [pagination, setPagination] = useState({});
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
- 
+
   useEffect(() => {
     const q = searchParams.get("q");
     setQueryParam(q);
@@ -33,7 +32,7 @@ const SearchAnime = () => {
       setPagination(JSON.parse(storedPagination));
       setCurrentPage(parseInt(storedPage, 10));
     } else {
-       fetchAnime(search, (parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1);
+      fetchAnime(search, (parseInt(storedPage, 10) != null && !isNaN(parseInt(storedPage, 10))) ? parseInt(storedPage, 10) : 1);
     }
   }, []);
 
@@ -98,22 +97,24 @@ const SearchAnime = () => {
         resetSearch={resetSearch}
       />
 
-      {pagination.last_visible_page && pagination.last_visible_page > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={pagination.last_visible_page}
-          onPageChange={handlePageChange}
-        />
-      )}
-      
-      <Series seriesList={animeList} queryParam={queryParam} />
-      {pagination.last_visible_page && pagination.last_visible_page > 1 && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={pagination.last_visible_page}
-          onPageChange={handlePageChange}
-        />
-      )}
+      <Suspense fallback={<Loader />}>
+        {pagination.last_visible_page && pagination.last_visible_page > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pagination.last_visible_page}
+            onPageChange={handlePageChange}
+          />
+        )}
+
+        <Series seriesList={animeList} queryParam={queryParam} />
+        {pagination.last_visible_page && pagination.last_visible_page > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={pagination.last_visible_page}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </Suspense>
     </div>
   );
 };

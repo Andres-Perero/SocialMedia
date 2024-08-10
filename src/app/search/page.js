@@ -11,6 +11,14 @@ import { useSearchParams } from "next/navigation";
 import Loader from "../Loader";
 
 const SearchAnime = () => {
+  return (
+    <Suspense fallback={<Loader />}>
+      <SearchAnimeContent />
+    </Suspense>
+  );
+};
+
+const SearchAnimeContent = () => {
   const searchParams = useSearchParams();
   const [animeList, setAnimeList] = useState([]);
   const [pagination, setPagination] = useState({});
@@ -98,24 +106,22 @@ const SearchAnime = () => {
         resetSearch={resetSearch}
       />
 
-      <Suspense fallback={<Loader />}>
-        {pagination.last_visible_page && pagination.last_visible_page > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={pagination.last_visible_page}
-            onPageChange={handlePageChange}
-          />
-        )}
+      {pagination.last_visible_page && pagination.last_visible_page > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={pagination.last_visible_page}
+          onPageChange={handlePageChange}
+        />
+      )}
 
-        <Series seriesList={animeList} queryParam={queryParam} />
-        {pagination.last_visible_page && pagination.last_visible_page > 1 && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={pagination.last_visible_page}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </Suspense>
+      <Series seriesList={animeList} queryParam={queryParam} />
+      {pagination.last_visible_page && pagination.last_visible_page > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={pagination.last_visible_page}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

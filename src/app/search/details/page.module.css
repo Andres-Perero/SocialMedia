@@ -201,3 +201,24 @@
 .likeIcon.active svg {
   stroke: rgba(214, 211, 224, 0.438); /* Stroke color when clicked */
 }
+.tooltip {
+  position: absolute; /* Position tooltip relative to the likeIcon */
+  bottom: 10%; /* Position above the likeIcon */
+  right: 20%;
+  transform: translateX(-50%); /* Center the tooltip horizontally */
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 0.6rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  visibility: hidden;
+  z-index: 10; /* Ensure tooltip appears above other content */
+}
+
+.likeIcon:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}

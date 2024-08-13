@@ -3,9 +3,11 @@ import Link from "next/link";
 import styles from "./SerieCard.module.css";
 import Image from "next/image";
 
-export const SerieCard = ({ title, image, id, url, moreInfo, queryParam }) => {
+export const SerieCard = ({ title, image,  moreInfo, queryParam, jsonData }) => {
   const handleClick = () => {
     localStorage.setItem("moreInfo", JSON.stringify(moreInfo));
+    localStorage.setItem("jsonData", JSON.stringify(jsonData));
+    // No es necesario guardar jsonData aquí ya que ya se maneja en SearchAnime
   };
 
   const getStatusClass = (status) => {
@@ -35,7 +37,7 @@ export const SerieCard = ({ title, image, id, url, moreInfo, queryParam }) => {
             src={image} 
             alt={title} 
             fill 
-            className={styles.image} // Aplica la clase para el ajuste de imagen
+            className={styles.image} 
             priority 
             sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw" 
           />

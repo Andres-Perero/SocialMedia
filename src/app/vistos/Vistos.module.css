@@ -1,0 +1,111 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  padding: 55px;
+}
+
+.card {
+  width: 90%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.imageContainer span {
+  color: rgb(12, 12, 11);
+  background-color: #fbbf24;
+}
+
+.mangaImage {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 150 / 200;
+  object-fit: cover;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: #e2e8f0;
+}
+
+.cardContent {
+  padding: 16px;
+}
+
+.ratingContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ratingText {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.descriptionContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.descriptionContainer span {
+  background-color: #9ca3af2f;
+}
+
+.descriptionText {
+  font-size: 14px;
+}
+
+.starIcon {
+  width: 16px;
+  height: 16px;
+  color: #fbbf24;
+  cursor: pointer;
+  position: relative;
+ 
+}
+
+.tooltipContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position the tooltip above the icon */
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltipContainer:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.bookIcon {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}

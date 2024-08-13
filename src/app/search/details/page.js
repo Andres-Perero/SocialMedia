@@ -4,23 +4,18 @@ import Link from "next/link";
 import styles from "./page.module.css";
 import FormListEpisodes from "./formListEpisodes";
 import Image from "next/image";
-import {
-  RederictIcon,
-  LikeIcon,
-  LikeFillIcon, // Import the filled version of the Like icon
-  ExclamationCircleIcon,
-  StationIcon,
-  CollectionPlayIcon,
-} from "../../icons_data";
+import { RederictIcon, LikeIcon, LikeFillIcon } from "../../icons_data";
 import { useSearchParams } from "next/navigation";
 import Loader from "src/app/Loader";
 
 const Details = () => {
   const [moreInfo, setMoreInfo] = useState(null);
+  const [existingJson, setExistingJson] = useState([]);
   const [activeTab, setActiveTab] = useState("info");
-  const [isLiked, setIsLiked] = useState(false); // State to track the like status
+  const [isLiked, setIsLiked] = useState(false);
   const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
+  const [tooltip, setTooltip] = useState(""); // State for the tooltip text
 
   useEffect(() => {
     const q = searchParams.get("q");
@@ -29,14 +24,53 @@ const Details = () => {
 
   useEffect(() => {
     const storedMoreInfo = localStorage.getItem("moreInfo");
+    const storedJsonData = localStorage.getItem("jsonData");
+
     if (storedMoreInfo) {
       setMoreInfo(JSON.parse(storedMoreInfo));
     }
+    if (storedJsonData) {
+      setExistingJson(JSON.parse(storedJsonData));
+    }
   }, []);
 
+  useEffect(() => {
+    if (moreInfo) {
+      const isAlreadyLiked = existingJson.some(
+        (serie) => serie.mal_id === moreInfo.mal_id
+      );
+      setIsLiked(isAlreadyLiked);
+      setTooltip(isAlreadyLiked ? "Guardado" : "Guardar");
+    }
+  }, [moreInfo, existingJson]);
+
   const handleLikeClick = () => {
+    if (isLiked) {
+      removeSerie(moreInfo); // Eliminar de existingJson
+      setTooltip("Guardar");
+    } else {
+      saveSerie(moreInfo); // Agregar a existingJson
+      setTooltip("Guardado");
+    }
     setIsLiked(!isLiked);
-    SaveSerie(moreInfo); // Call the function to save the information
+  };
+
+  const saveSerie = (serieInfo) => {
+    setExistingJson((prevJson) => {
+      const updatedJson = [...prevJson, serieInfo];
+      localStorage.setItem("existingJson", JSON.stringify(updatedJson));
+      return updatedJson;
+    });
+  };
+
+  const removeSerie = (serieInfo) => {
+    setExistingJson((prevJson) => {
+      const updatedJson = prevJson.filter(
+        (serie) => serie.mal_id !== serieInfo.mal_id
+      );
+      localStorage.setItem("existingJson", JSON.stringify(updatedJson));
+      return updatedJson;
+    });
   };
 
   if (!moreInfo) {
@@ -46,10 +80,16 @@ const Details = () => {
   return (
     <div className={styles.container}>
       <div className={styles.navigation}>
-        <Link href={{ pathname: "/", query: { q: queryParam } }}>
+        <Link
+          rel="preload"
+          href={{ pathname: "/", query: { q: queryParam } }}
+        >
           <p>INICIO</p>
         </Link>
-        <Link href={{ pathname: "/search", query: { q: queryParam } }}>
+        <Link
+          rel="preload"
+          href={{ pathname: "/search", query: { q: queryParam } }}
+        >
           <p>BIBLIOTECA</p>
         </Link>
       </div>
@@ -63,14 +103,21 @@ const Details = () => {
             alt={moreInfo.title}
             fill
             style={{ objectFit: "cover" }}
-            priority 
-            sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw" 
+            priority
+            sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <div
             className={`${styles.likeIcon} ${isLiked ? styles.active : ""}`}
             onClick={handleLikeClick}
+            onMouseEnter={() => setTooltip(isLiked ? "Guardado" : "Guardar")}
+            onMouseLeave={() => setTooltip("")}
           >
             {isLiked ? <LikeFillIcon /> : <LikeIcon />}
+            {tooltip && (
+              <div className={styles.tooltip}>
+                {tooltip}
+              </div>
+            )}
           </div>
         </div>
 
@@ -120,8 +167,8 @@ const Details = () => {
                   <a
                     className={styles.socials}
                     href={moreInfo.url}
-                    data-tooltip={moreInfo.title}
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <RederictIcon />
                   </a>
@@ -155,12 +202,6 @@ const Details = () => {
       </div>
     </div>
   );
-};
-
-// Function to handle saving the series
-const SaveSerie = (serie) => {
-  // Logic to save the serie, e.g., to local storage or a database
-  console.log("Saving series:", serie);
 };
 
 export default function PageWrapper() {

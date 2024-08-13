@@ -1,18 +1,10 @@
 import { listFilesInFolder, getFileContent } from "../../src/lib/googleDrive.js";
-let cache = {};
 
 export default async function handler(req, res) {
   const { folderId, fileName } = req.query;
 
   if (!folderId || !fileName) {
     return res.status(400).json({ error: "Folder ID and File Name are required" });
-  }
-
-
-
-  const cacheKey = `${folderId}_${fileName}`;
-  if (cache[cacheKey]) {
-    return res.status(200).json(cache[cacheKey]);
   }
 
   try {
@@ -22,15 +14,13 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "No files found in folder" });
     }
 
-    // Search for the file by name, ensuring it's a JSON file
+    // Buscar el archivo por nombre, asegurando que sea un archivo JSON
     const file = files.find(f => f.name === fileName);
     if (!file) {
       return res.status(404).json({ error: "File not found" });
     }
 
     const content = await getFileContent(file.id);
-    cache[cacheKey] = content; // Cache the result
-
     res.status(200).json(content);
   } catch (error) {
     console.error("Error fetching file content:", error);

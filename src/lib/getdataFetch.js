@@ -8,6 +8,7 @@ export async function fetchJsonData(folderId, fileName) {
 
   try {
     const response = await fetch(`/api/getJsonFromFolder?folderId=${folderId}&fileName=${fileName}`);
+    
     if (!response.ok) {
       throw new Error(`Error fetching data: ${response.statusText}`);
     }

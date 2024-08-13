@@ -30,7 +30,7 @@ const SearchAnimeContent = () => {
   const [loading, setLoading] = useState(true);
   const [existingJson, setExistingJson] = useState([]); // Inicializa como array vacío
   const [jsonData, setJsonData] = useState(null);
-
+const [dataTemp, setDataTemp ] = useState([]);
   const folderId =
     process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER_DATA_VIEWED_PER_USER;
 
@@ -44,6 +44,7 @@ const SearchAnimeContent = () => {
     const storedPage = sessionStorage.getItem("currentPage");
     const storedExistingJson = localStorage.getItem("existingJson");
 
+    const storedDataTemp = sessionStorage.getItem("dataTemp");
     if (storedSearch && storedAnimeList && storedPagination && storedPage) {
       setSearch(storedSearch);
       setAnimeList(JSON.parse(storedAnimeList));
@@ -56,6 +57,11 @@ const SearchAnimeContent = () => {
     if (storedExistingJson) {
       setExistingJson(JSON.parse(storedExistingJson));
     }
+    if (storedDataTemp) {
+     
+      setDataTemp(JSON.parse(storedDataTemp));
+    }
+
   }, [searchParams]);
 
   useEffect(() => {
@@ -63,21 +69,33 @@ const SearchAnimeContent = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await getDataViewedFetch(folderId, queryParam);
-
-        setJsonData(data);
-        if (
-          existingJson.length > 0 &&
-          (data.length === 0 ||
-            JSON.stringify(existingJson) !== JSON.stringify(data))
-        ) {
+      
+        if (existingJson.length> 0 && JSON.stringify(dataTemp) == JSON.stringify(existingJson)) {
           setJsonData(existingJson);
-          await updateJsonFile({
-            folderId,
-            fileName: queryParam,
-            newData: existingJson,
-          });
+          console.log("igual");
+        } else {
+          console.log("no igual");
+    
+          const data = await getDataViewedFetch(folderId, queryParam);
+       
+          setJsonData(data);
+        
+          sessionStorage.setItem("dataTemp", JSON.stringify(data));
+          if (
+            existingJson.length > 0 &&
+            (data.length === 0 ||
+              JSON.stringify(existingJson) !== JSON.stringify(data))
+          ) {
+            setJsonData(existingJson);
+            await updateJsonFile({
+              folderId,
+              fileName: queryParam,
+              newData: existingJson,
+            });
+            sessionStorage.setItem("dataTemp", JSON.stringify(existingJson));
+          }
         }
+  
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
@@ -140,7 +158,7 @@ const SearchAnimeContent = () => {
           }}
         >
           <h1 className={styles.homeLink} title="Inicio">
-            {HomeIcon()}{" "}
+            Inicio
           </h1>
         </Link>
         <Link
@@ -149,7 +167,9 @@ const SearchAnimeContent = () => {
             query: { q: queryParam },
           }}
         >
-          <span>Vistos</span>
+          <h1 className={styles.homeLink} title="Vistos">
+            Vistos
+          </h1>
         </Link>
       </div>
       <FormSearchSerie

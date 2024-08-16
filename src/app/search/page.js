@@ -5,10 +5,8 @@ import { Pagination } from "./Pagination";
 import { Series } from "./Series";
 import Link from "next/link";
 import styles from "./Page.module.css";
-import { HomeIcon } from "../icons_data";
 import { useSearchParams } from "next/navigation";
 import Loader from "../Loader";
-import { fetchJsonData } from "src/lib/getdataFetch";
 import { updateJsonFile } from "src/lib/updateDataFetch";
 import { getDataViewedFetch } from "src/lib/getDataViewedFetch";
 
@@ -30,7 +28,8 @@ const SearchAnimeContent = () => {
   const [loading, setLoading] = useState(true);
   const [existingJson, setExistingJson] = useState([]); // Inicializa como array vacío
   const [jsonData, setJsonData] = useState(null);
-const [dataTemp, setDataTemp ] = useState([]);
+  const [dataTemp, setDataTemp] = useState([]);
+  const [rederictPagViewed, setRederictPagViewed] = useState(false);
   const folderId =
     process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER_DATA_VIEWED_PER_USER;
 
@@ -42,9 +41,11 @@ const [dataTemp, setDataTemp ] = useState([]);
     const storedAnimeList = sessionStorage.getItem("animeList");
     const storedPagination = sessionStorage.getItem("pagination");
     const storedPage = sessionStorage.getItem("currentPage");
+    
     const storedExistingJson = localStorage.getItem("existingJson");
-
     const storedDataTemp = sessionStorage.getItem("dataTemp");
+    const storedRederictPagViewed = localStorage.getItem("rederictPagViewed");
+
     if (storedSearch && storedAnimeList && storedPagination && storedPage) {
       setSearch(storedSearch);
       setAnimeList(JSON.parse(storedAnimeList));
@@ -53,15 +54,15 @@ const [dataTemp, setDataTemp ] = useState([]);
     } else {
       fetchAnime(search, parseInt(storedPage, 10) || 1);
     }
-
+    if (storedRederictPagViewed) {
+      setRederictPagViewed(JSON.parse(storedRederictPagViewed));
+    }
     if (storedExistingJson) {
       setExistingJson(JSON.parse(storedExistingJson));
     }
     if (storedDataTemp) {
-     
       setDataTemp(JSON.parse(storedDataTemp));
     }
-
   }, [searchParams]);
 
   useEffect(() => {
@@ -69,22 +70,21 @@ const [dataTemp, setDataTemp ] = useState([]);
     const fetchData = async () => {
       setLoading(true);
       try {
-      
-        if (existingJson.length> 0 && JSON.stringify(dataTemp) == JSON.stringify(existingJson)) {
+        if (rederictPagViewed) setDataTemp(existingJson);
+        if (
+          existingJson.length > 0 &&
+          JSON.stringify(dataTemp) == JSON.stringify(existingJson)
+        ) {
           setJsonData(existingJson);
-          console.log("igual");
         } else {
-          console.log("no igual");
-    
           const data = await getDataViewedFetch(folderId, queryParam);
-       
+
           setJsonData(data);
-        
+
           sessionStorage.setItem("dataTemp", JSON.stringify(data));
           if (
-            existingJson.length > 0 &&
-            (data.length === 0 ||
-              JSON.stringify(existingJson) !== JSON.stringify(data))
+            data.length === 0 ||
+            JSON.stringify(existingJson) !== JSON.stringify(data)
           ) {
             setJsonData(existingJson);
             await updateJsonFile({
@@ -95,7 +95,6 @@ const [dataTemp, setDataTemp ] = useState([]);
             sessionStorage.setItem("dataTemp", JSON.stringify(existingJson));
           }
         }
-  
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
@@ -104,7 +103,7 @@ const [dataTemp, setDataTemp ] = useState([]);
     };
 
     fetchData();
-  }, [folderId, queryParam, existingJson]);
+  }, [folderId, queryParam, existingJson, dataTemp]);
 
   const fetchAnime = async (query = "", page = 1) => {
     const res = await fetch(
@@ -112,7 +111,13 @@ const [dataTemp, setDataTemp ] = useState([]);
     );
     const data = await res.json();
 
-    setAnimeList(data.data);
+    setAnimeList(
+      data.data.map((item) => ({
+        ...item,
+        statusViewed: false, // Inicialmente todos en false
+      }))
+    );
+
     setPagination(data.pagination);
     setCurrentPage(page);
 
@@ -141,7 +146,13 @@ const [dataTemp, setDataTemp ] = useState([]);
     sessionStorage.removeItem("pagination");
     sessionStorage.removeItem("currentPage");
     localStorage.removeItem("moreInfo");
+
     fetchAnime();
+  };
+  const handleClick = () => {
+    localStorage.setItem("existingJson", JSON.stringify(jsonData));
+    // localStorage.setItem("jsonData", JSON.stringify(jsonData));
+    // No es necesario guardar jsonData aquí ya que ya se maneja en SearchAnime
   };
 
   if (loading) {
@@ -166,6 +177,7 @@ const [dataTemp, setDataTemp ] = useState([]);
             pathname: "/vistos",
             query: { q: queryParam },
           }}
+          onClick={handleClick}
         >
           <h1 className={styles.homeLink} title="Vistos">
             Vistos
@@ -188,9 +200,9 @@ const [dataTemp, setDataTemp ] = useState([]);
       )}
 
       <Series
-        seriesList={animeList}
-        queryParam={queryParam}
-        jsonData={jsonData}
+        seriesList={animeList} //este es el fetch de la lista anime
+        queryParam={queryParam} // parametro ID de cual buscar
+        jsonData={jsonData} // este es el fetch de la lista que estan guardados en la base
       />
       {pagination.last_visible_page && pagination.last_visible_page > 1 && (
         <Pagination

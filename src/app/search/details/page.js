@@ -80,17 +80,22 @@ const Details = () => {
   return (
     <div className={styles.container}>
       <div className={styles.navigation}>
-        <Link
-          rel="preload"
-          href={{ pathname: "/", query: { q: queryParam } }}
-        >
-          <p>INICIO</p>
+        <Link rel="preload" href={{ pathname: "/", query: { q: queryParam } }}>
+          <p title="INICIO">INICIO</p>
         </Link>
         <Link
           rel="preload"
           href={{ pathname: "/search", query: { q: queryParam } }}
         >
-          <p>BIBLIOTECA</p>
+          <p title="BIBLIOTECA">BIBLIOTECA</p>
+        </Link>
+        <Link
+          href={{
+            pathname: "/vistos",
+            query: { q: queryParam },
+          }}
+        >
+          <p title="Vistos">Vistos</p>
         </Link>
       </div>
       <div className={styles.header}>
@@ -113,11 +118,7 @@ const Details = () => {
             onMouseLeave={() => setTooltip("")}
           >
             {isLiked ? <LikeFillIcon /> : <LikeIcon />}
-            {tooltip && (
-              <div className={styles.tooltip}>
-                {tooltip}
-              </div>
-            )}
+            {tooltip && <div className={styles.tooltip}>{tooltip}</div>}
           </div>
         </div>
 

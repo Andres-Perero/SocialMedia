@@ -54,6 +54,7 @@ const SearchAnimeContent = () => {
     if (storedMoreInfo) {
       setDataInfoSerie(JSON.parse(storedMoreInfo));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // Fetch data for viewed anime
@@ -77,9 +78,11 @@ const SearchAnimeContent = () => {
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [folderId, queryParam, dataInfoSerie]);
 
   // Function to merge and update jsonData
+  
   const handleDataMerge = async (data, infoSerie) => {
     if (Object.keys(data).length === 0 && infoSerie.isSaved) {
       setJsonData([infoSerie]);

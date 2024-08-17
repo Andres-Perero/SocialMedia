@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -7,15 +7,18 @@ import Image from "next/image";
 import { RederictIcon, LikeIcon, LikeFillIcon } from "../../icons_data";
 import { useSearchParams } from "next/navigation";
 import Loader from "src/app/Loader";
+import { translateFetch } from "src/lib/translateFetch";
 
 const Details = () => {
   const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
   const [dataInfoSerie, setDataInfoSerie] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const [tooltip, setTooltip] = useState(""); 
+  const [tooltip, setTooltip] = useState("");
   const [activeTab, setActiveTab] = useState("info");
-
+  const [translatedSynopsis, setTranslatedSynopsis] = useState("");
+  const [translatedGenres, setTranslatedGenres] = useState([]);
+const [statusSerie, setStatusSerie] = useState("");
   useEffect(() => {
     setQueryParam(searchParams.get("q") || "");
   }, [searchParams]);
@@ -39,8 +42,35 @@ const Details = () => {
   }, [isLiked]);
 
   const handleLikeClick = () => {
-    setIsLiked(prev => !prev);
+    setIsLiked((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (dataInfoSerie) {
+      async function translateContent() {
+        const translatedText = await translateFetch(
+          dataInfoSerie.synopsis,
+          "es"
+        );
+        setTranslatedSynopsis(translatedText || "Sinopsis no disponible");
+        const translateStatus = await translateFetch(
+          dataInfoSerie.status,
+          "es"
+        );
+        setStatusSerie(translateStatus || "No disponible");
+        if (dataInfoSerie.genres?.length > 0) {
+          const translated = await Promise.all(
+            dataInfoSerie.genres.map(async (genre) => {
+              const translatedGenre = await translateFetch(genre.name, "es");
+              return translatedGenre || genre.name;
+            })
+          );
+          setTranslatedGenres(translated);
+        }
+      }
+      translateContent();
+    }
+  }, [dataInfoSerie]);
 
   if (!dataInfoSerie) {
     return <Loader />;
@@ -58,14 +88,14 @@ const Details = () => {
         >
           <p title="BIBLIOTECA">BIBLIOTECA</p>
         </Link>
-        <Link
+        {/* <Link
           href={{
             pathname: "/vistos",
             query: { q: queryParam },
           }}
         >
           <p title="Vistos">Vistos</p>
-        </Link>
+        </Link> */}
       </div>
       <div className={styles.header}>
         <h1 className={styles.title}>{dataInfoSerie.title}</h1>
@@ -114,19 +144,21 @@ const Details = () => {
             {activeTab === "info" && (
               <div className={styles.infoLeft}>
                 <div className={styles.detail}>
-                  <strong>Nombre original:</strong> {dataInfoSerie.title_japanese}
+                  <strong>Nombre original:</strong>{" "}
+                  {dataInfoSerie.title_japanese}
                 </div>
                 <div className={styles.detail}>
                   <strong>Tipo:</strong> {dataInfoSerie.type}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Fecha de emisión:</strong> {dataInfoSerie.aired.string}
+                  <strong>Fecha de emisión:</strong>{" "}
+                  {dataInfoSerie.aired.string}
                 </div>
                 <div className={styles.detail}>
                   <strong>Capítulos:</strong> {dataInfoSerie.episodes}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Estado:</strong> {dataInfoSerie.status}
+                  <strong>Estado:</strong> {statusSerie}
                 </div>
                 <div className={styles.detail}>
                   <strong>Demografía:</strong>{" "}
@@ -146,14 +178,14 @@ const Details = () => {
 
                 <div className={styles.description}>
                   <h3>Sinopsis:</h3>
-                  <p>{dataInfoSerie.synopsis || "Sinopsis no disponible"}</p>
+                  <p>{translatedSynopsis}</p>
                 </div>
                 <div className={styles.genres}>
                   <h3>Géneros:</h3>
-                  {dataInfoSerie.genres?.length > 0 ? (
+                  {translatedGenres.length > 0 ? (
                     <ul>
-                      {dataInfoSerie.genres.map((genre, index) => (
-                        <li key={index}>{genre.name}</li>
+                      {translatedGenres.map((genre, index) => (
+                        <li key={index}>{genre}</li>
                       ))}
                     </ul>
                   ) : (

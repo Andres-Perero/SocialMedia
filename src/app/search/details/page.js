@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
@@ -9,71 +9,40 @@ import { useSearchParams } from "next/navigation";
 import Loader from "src/app/Loader";
 
 const Details = () => {
-  const [moreInfo, setMoreInfo] = useState(null);
-  const [existingJson, setExistingJson] = useState([]);
-  const [activeTab, setActiveTab] = useState("info");
-  const [isLiked, setIsLiked] = useState(false);
   const searchParams = useSearchParams();
   const [queryParam, setQueryParam] = useState("");
-  const [tooltip, setTooltip] = useState(""); // State for the tooltip text
+  const [dataInfoSerie, setDataInfoSerie] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [tooltip, setTooltip] = useState(""); 
+  const [activeTab, setActiveTab] = useState("info");
 
   useEffect(() => {
-    const q = searchParams.get("q");
-    setQueryParam(q);
+    setQueryParam(searchParams.get("q") || "");
   }, [searchParams]);
 
   useEffect(() => {
     const storedMoreInfo = localStorage.getItem("moreInfo");
-    const storedJsonData = localStorage.getItem("jsonData");
-
     if (storedMoreInfo) {
-      setMoreInfo(JSON.parse(storedMoreInfo));
-    }
-    if (storedJsonData) {
-      setExistingJson(JSON.parse(storedJsonData));
+      const parsedInfo = JSON.parse(storedMoreInfo);
+      setDataInfoSerie(parsedInfo);
+      setIsLiked(!!parsedInfo.isSaved);
     }
   }, []);
 
   useEffect(() => {
-    if (moreInfo) {
-      const isAlreadyLiked = existingJson.some(
-        (serie) => serie.mal_id === moreInfo.mal_id
-      );
-      setIsLiked(isAlreadyLiked);
-      setTooltip(isAlreadyLiked ? "Guardado" : "Guardar");
+    if (dataInfoSerie) {
+      setTooltip(isLiked ? "Guardado" : "Guardar");
+      const updatedDataInfoSerie = { ...dataInfoSerie, isSaved: isLiked };
+      setDataInfoSerie(updatedDataInfoSerie);
+      localStorage.setItem("moreInfo", JSON.stringify(updatedDataInfoSerie));
     }
-  }, [moreInfo, existingJson]);
+  }, [isLiked]);
 
   const handleLikeClick = () => {
-    if (isLiked) {
-      removeSerie(moreInfo); // Eliminar de existingJson
-      setTooltip("Guardar");
-    } else {
-      saveSerie(moreInfo); // Agregar a existingJson
-      setTooltip("Guardado");
-    }
-    setIsLiked(!isLiked);
+    setIsLiked(prev => !prev);
   };
 
-  const saveSerie = (serieInfo) => {
-    setExistingJson((prevJson) => {
-      const updatedJson = [...prevJson, serieInfo];
-      localStorage.setItem("existingJson", JSON.stringify(updatedJson));
-      return updatedJson;
-    });
-  };
-
-  const removeSerie = (serieInfo) => {
-    setExistingJson((prevJson) => {
-      const updatedJson = prevJson.filter(
-        (serie) => serie.mal_id !== serieInfo.mal_id
-      );
-      localStorage.setItem("existingJson", JSON.stringify(updatedJson));
-      return updatedJson;
-    });
-  };
-
-  if (!moreInfo) {
+  if (!dataInfoSerie) {
     return <Loader />;
   }
 
@@ -99,13 +68,13 @@ const Details = () => {
         </Link>
       </div>
       <div className={styles.header}>
-        <h1 className={styles.title}>{moreInfo.title}</h1>
+        <h1 className={styles.title}>{dataInfoSerie.title}</h1>
       </div>
       <div className={styles.mainContent}>
         <div className={styles.imageWrapper}>
           <Image
-            src={moreInfo.images.jpg.large_image_url}
-            alt={moreInfo.title}
+            src={dataInfoSerie.images.jpg.large_image_url}
+            alt={dataInfoSerie.title}
             fill
             style={{ objectFit: "cover" }}
             priority
@@ -145,29 +114,29 @@ const Details = () => {
             {activeTab === "info" && (
               <div className={styles.infoLeft}>
                 <div className={styles.detail}>
-                  <strong>Nombre original:</strong> {moreInfo.title_japanese}
+                  <strong>Nombre original:</strong> {dataInfoSerie.title_japanese}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Tipo:</strong> {moreInfo.type}
+                  <strong>Tipo:</strong> {dataInfoSerie.type}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Fecha de emisión:</strong> {moreInfo.aired.string}
+                  <strong>Fecha de emisión:</strong> {dataInfoSerie.aired.string}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Capítulos:</strong> {moreInfo.episodes}
+                  <strong>Capítulos:</strong> {dataInfoSerie.episodes}
                 </div>
                 <div className={styles.detail}>
-                  <strong>Estado:</strong> {moreInfo.status}
+                  <strong>Estado:</strong> {dataInfoSerie.status}
                 </div>
                 <div className={styles.detail}>
                   <strong>Demografía:</strong>{" "}
-                  {moreInfo.demographics?.[0]?.name || "No disponible"}
+                  {dataInfoSerie.demographics?.[0]?.name || "No disponible"}
                 </div>
                 <div className={styles.detail}>
                   <strong>URL:</strong>{" "}
                   <a
                     className={styles.socials}
-                    href={moreInfo.url}
+                    href={dataInfoSerie.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -177,13 +146,13 @@ const Details = () => {
 
                 <div className={styles.description}>
                   <h3>Sinopsis:</h3>
-                  <p>{moreInfo.synopsis || "Sinopsis no disponible"}</p>
+                  <p>{dataInfoSerie.synopsis || "Sinopsis no disponible"}</p>
                 </div>
                 <div className={styles.genres}>
                   <h3>Géneros:</h3>
-                  {moreInfo.genres?.length > 0 ? (
+                  {dataInfoSerie.genres?.length > 0 ? (
                     <ul>
-                      {moreInfo.genres.map((genre, index) => (
+                      {dataInfoSerie.genres.map((genre, index) => (
                         <li key={index}>{genre.name}</li>
                       ))}
                     </ul>
@@ -195,7 +164,7 @@ const Details = () => {
             )}
             {activeTab === "episodes" && (
               <div className={styles.episodeList}>
-                <FormListEpisodes animeId={moreInfo.mal_id} />
+                <FormListEpisodes animeId={dataInfoSerie.mal_id} />
               </div>
             )}
           </div>

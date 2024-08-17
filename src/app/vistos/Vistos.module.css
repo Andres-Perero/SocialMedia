@@ -4,6 +4,29 @@
   gap: 16px;
   padding: 55px;
 }
+.homeLinkContainer {
+  text-align: start;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.homeLink {
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: #c9ddf3b2; /* Color de fondo */
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.homeLink:hover {
+  background-color: #0056b3; /* Color de fondo al pasar el ratón */
+  color: #e0e0e0; /* Color del texto al pasar el ratón */
+}
+
 
 .card {
   width: 90%;

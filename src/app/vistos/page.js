@@ -43,7 +43,7 @@ const Vistos = () => {
 
   // Actualizar el estado 'seen' 
   useEffect(() => {
-    setSeen(jsonData.map((item) => item.statusViewed));
+    setSeen(jsonData.map((item) => item.isWatched));
   }, [jsonData]);
 
   // Alternar el estado 'statusViewed' cuando se haga clic en una estrella
@@ -53,7 +53,7 @@ const Vistos = () => {
     );
     setJsonData((prevData) =>
       prevData.map((item, i) =>
-        i === index ? { ...item, statusViewed: !item.statusViewed } : item
+        i === index ? { ...item, isWatched: !item.isWatched } : item
       )
     );
   };
@@ -62,7 +62,6 @@ const Vistos = () => {
   const handleSaveChanges = async () => {
     try {
       localStorage.setItem("existingJson", JSON.stringify(jsonData));
-      localStorage.setItem("rederictPagViewed", JSON.stringify(true));
       await updateJsonFile({
         folderId,
         fileName: queryParam,
@@ -76,7 +75,7 @@ const Vistos = () => {
   };
   const handleClick = (item) => {
     localStorage.setItem("moreInfo", JSON.stringify(item));
-    localStorage.setItem("existingJson", JSON.stringify(jsonData));
+   
   };
 
   if (loading) {
@@ -85,12 +84,17 @@ const Vistos = () => {
 
   return (
     <div>
-      <div>
+   
+      <div className={styles.homeLinkContainer}>
         <Link href={{ pathname: "/", query: { q: queryParam } }}>
-          <p>INICIO</p>
+          <h1 className={styles.homeLink} title="Inicio">
+            Inicio
+          </h1>
         </Link>
         <Link href={{ pathname: "/search", query: { q: queryParam } }}>
-          <p>BIBLIOTECA</p>
+          <h1 className={styles.homeLink} title="Biblioteca">
+          BIBLIOTECA
+          </h1>
         </Link>
       </div>
       <button onClick={handleSaveChanges}>Guardar Cambios</button>

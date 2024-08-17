@@ -12,17 +12,17 @@ export const SerieCard = ({ title, image,  moreInfo, queryParam, jsonData }) => 
 
   const getStatusClass = (status) => {
     switch (status) {
-      case "Not yet aired":
+      case "Aún no emitido":
         return styles.statusNotYetAired;
-      case "Finished Airing":
+      case "Terminado":
         return styles.statusFinishedAiring;
-      case "Currently Airing":
+      case "Actualmente transmitiendo":
         return styles.statusCurrentlyAiring;
       default:
         return "";
     }
   };
-
+// <div className={styles.genres} > {moreInfo.isSaved ? "SI": "NO"}</div>
   return (
     <div className={styles.gridItem}>
       <Link
@@ -47,6 +47,7 @@ export const SerieCard = ({ title, image,  moreInfo, queryParam, jsonData }) => 
           <div className={styles.episodes}>
             {moreInfo.episodes ? `${moreInfo.episodes} eps` : "??? eps"}
           </div>
+         
           <div className={styles.status}>
             <div
               className={`${styles.statusDot} ${getStatusClass(
@@ -70,6 +71,7 @@ export const SerieCard = ({ title, image,  moreInfo, queryParam, jsonData }) => 
           </div>
         </div>
       </Link>
+     
     </div>
   );
 };

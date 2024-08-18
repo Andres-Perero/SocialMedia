@@ -187,9 +187,9 @@ const SearchAnimeContent = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.homeLinkContainer}>
+      <div className={styles.navLinks}>
         <Link href={{ pathname: "/", query: { q: queryParam } }}>
-          <h1 className={styles.homeLink} title="Inicio">
+          <h1 className={styles.link} title="Inicio">
             Inicio
           </h1>
         </Link>
@@ -197,7 +197,7 @@ const SearchAnimeContent = () => {
           href={{ pathname: "/vistos", query: { q: queryParam } }}
           onClick={handleClick}
         >
-          <h1 className={styles.homeLink} title="Vistos">
+          <h1 className={styles.link} title="Vistos">
             Vistos
           </h1>
         </Link>

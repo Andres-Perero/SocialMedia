@@ -14,6 +14,7 @@ const Vistos = () => {
   const [jsonData, setJsonData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [seen, setSeen] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const folderId =
     process.env.NEXT_PUBLIC_SOCIAL_MEDIA_FOLDER_DATA_VIEWED_PER_USER;
 
@@ -41,7 +42,7 @@ const Vistos = () => {
     fetchData();
   }, [folderId, queryParam]);
 
-  // Actualizar el estado 'seen' 
+  // Actualizar el estado 'seen'
   useEffect(() => {
     setSeen(jsonData.map((item) => item.isWatched));
   }, [jsonData]);
@@ -75,31 +76,49 @@ const Vistos = () => {
   };
   const handleClick = (item) => {
     localStorage.setItem("moreInfo", JSON.stringify(item));
-   
   };
 
+  const filteredWatchedAnime = jsonData.filter((anime) =>
+    anime.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  // const filteredUnwatchedAnime = unwatchedAnime.filter((anime) =>
+  //   anime.title.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
   if (loading) {
     return <Loader />;
   }
 
   return (
-    <div>
-   
-      <div className={styles.homeLinkContainer}>
-        <Link href={{ pathname: "/", query: { q: queryParam } }}>
-          <h1 className={styles.homeLink} title="Inicio">
-            Inicio
-          </h1>
+    <div className={styles.container}>
+      <div className={styles.navLinks}>
+        <Link
+          href={{ pathname: "/", query: { q: queryParam } }}
+          className={styles.link}
+        >
+          Inicio
         </Link>
-        <Link href={{ pathname: "/search", query: { q: queryParam } }}>
-          <h1 className={styles.homeLink} title="Biblioteca">
-          BIBLIOTECA
-          </h1>
+        <Link
+          href={{ pathname: "/search", query: { q: queryParam } }}
+          className={styles.link}
+        >
+          Biblioteca
         </Link>
       </div>
-      <button onClick={handleSaveChanges}>Guardar Cambios</button>
+      <h1 className={styles.title}>My Anime List</h1>
+      <div className={styles.searchBox}>
+        <input
+          type="search"
+          placeholder="Busca aqui wachin..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={styles.searchInput}
+        />
+      </div>
+      <button onClick={handleSaveChanges} className={styles.saveButton}>
+        Guardar Cambios
+      </button>
       <div className={styles.gridContainer}>
-        {jsonData.map((item, index) => (
+        {filteredWatchedAnime.map((item, index) => (
           <div key={index} className={styles.card}>
             <Link
               href={{

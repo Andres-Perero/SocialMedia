@@ -9,27 +9,29 @@
   min-height: 100vh;
 }
 
-.homeLinkContainer {
-  text-align: start;
-  margin-top: 20px;
-  margin-left: 10px;
+/* Navigation links */
+.navLinks {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.homeLink {
-  display: inline-block;
-  padding: 5px 10px;
-  font-size: 1rem;
-  color: #ffffff;
-  background-color: #c9ddf3b2; /* Color de fondo */
+.link {
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  color: #e2e7ec;
+  background-color: #007bffab;
   border-radius: 5px;
   text-decoration: none;
   font-weight: bold;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s, text-decoration 0.3s;
 }
 
-.homeLink:hover {
-  background-color: #0056b3; /* Color de fondo al pasar el ratón */
-  color: #e0e0e0; /* Color del texto al pasar el ratón */
+.link:hover {
+  background-color: #0056b3;
+  color: #e0e0e0;
+  text-decoration: underline;
 }
-
 
